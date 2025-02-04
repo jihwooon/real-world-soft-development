@@ -4,41 +4,13 @@
 package com.example.real;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
 
-    public String getGreeting() {
-        return "The total for all transactions is ";
-    }
-
-    private static final String RESOURCE = "/Users/jihwooon/Workspaces/real-world-software-development/chapter1/src/main/resources/file.csv";
-
     public static void main(String[] args) throws IOException {
-        final Path path = Paths.get(RESOURCE);
-        final List<String> lines = Files.readAllLines(path);
+        final BankStatementParser bankStatementCSVParser = new BankStatementCSVParser();
 
-        final BankStatementCSVParser bankStatementCSVParser = new BankStatementCSVParser();
-        final List<BankTransaction> bankTransactions = bankStatementCSVParser.parserLinesFromCSV(
-            lines);
-
-        BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(
-            bankTransactions);
-
-        collectSummary(bankStatementProcessor, bankTransactions);
+        BankAnalyzer.analyze(bankStatementCSVParser);
     }
 
-    private static void collectSummary(BankStatementProcessor bankStatementProcessor,
-        List<BankTransaction> bankTransactions) {
-        System.out.println(new App().getGreeting() + bankStatementProcessor.calculateTotalAmount(
-            bankTransactions));
-        System.out.println(
-            new App().getGreeting() + bankStatementProcessor.selectInMonth(bankTransactions,
-                Month.JANUARY));
-    }
 }
