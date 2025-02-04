@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class App {
@@ -24,19 +23,33 @@ public class App {
         final Path path = Paths.get(RESOURCE);
         final List<String> lines = Files.readAllLines(path);
 
-        final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        final BankStatementCSVParser bankStatementCSVParser = new BankStatementCSVParser();
+        final List<BankTransaction> bankTransactions = bankStatementCSVParser.parserLinesFromCSV(
+            lines);
+
+        System.out.println(new App().getGreeting() + calculateTotalAmount(bankTransactions));
+        System.out.println(
+            new App().getGreeting() + selectInMonth(bankTransactions, Month.JANUARY));
+    }
+
+    private static double calculateTotalAmount(List<BankTransaction> bankTransactions) {
         double total = 0d;
+        for (final BankTransaction bankTransaction : bankTransactions) {
+            total += bankTransaction.amount();
+        }
 
-        for (final String line : lines) {
-            final String[] columns = line.split(",");
-            final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
+        return total;
+    }
 
-            if (date.getMonth() == Month.JANUARY) {
-                final double amount = Double.parseDouble(columns[1]);
-                total += amount;
+    private static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions,
+        final Month month) {
+        ArrayList<BankTransaction> bankTransactionInMonth = new ArrayList<>();
+        for (final BankTransaction bankTransaction : bankTransactions) {
+            if (bankTransaction.date().getMonth() == month) {
+                bankTransactionInMonth.add(bankTransaction);
             }
         }
 
-        System.out.println(new App().getGreeting() + total);
+        return bankTransactionInMonth;
     }
 }
