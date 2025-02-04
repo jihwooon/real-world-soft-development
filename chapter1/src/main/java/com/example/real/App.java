@@ -27,29 +27,18 @@ public class App {
         final List<BankTransaction> bankTransactions = bankStatementCSVParser.parserLinesFromCSV(
             lines);
 
-        System.out.println(new App().getGreeting() + calculateTotalAmount(bankTransactions));
+        BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(
+            bankTransactions);
+
+        collectSummary(bankStatementProcessor, bankTransactions);
+    }
+
+    private static void collectSummary(BankStatementProcessor bankStatementProcessor,
+        List<BankTransaction> bankTransactions) {
+        System.out.println(new App().getGreeting() + bankStatementProcessor.calculateTotalAmount(
+            bankTransactions));
         System.out.println(
-            new App().getGreeting() + selectInMonth(bankTransactions, Month.JANUARY));
-    }
-
-    private static double calculateTotalAmount(List<BankTransaction> bankTransactions) {
-        double total = 0d;
-        for (final BankTransaction bankTransaction : bankTransactions) {
-            total += bankTransaction.amount();
-        }
-
-        return total;
-    }
-
-    private static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions,
-        final Month month) {
-        ArrayList<BankTransaction> bankTransactionInMonth = new ArrayList<>();
-        for (final BankTransaction bankTransaction : bankTransactions) {
-            if (bankTransaction.date().getMonth() == month) {
-                bankTransactionInMonth.add(bankTransaction);
-            }
-        }
-
-        return bankTransactionInMonth;
+            new App().getGreeting() + bankStatementProcessor.selectInMonth(bankTransactions,
+                Month.JANUARY));
     }
 }
