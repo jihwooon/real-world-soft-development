@@ -32,4 +32,15 @@ public class BankStatementProcessor {
 
         return bankTransactionInMonth;
     }
+
+    public List<BankTransaction> findTransactionGreaterThanEqual(final int amount) {
+        final List<BankTransaction> result = new ArrayList<>();
+        for (final BankTransaction bankTransaction : bankTransactions) {
+            if (bankTransaction.amount() >= amount) {
+                result.add(bankTransaction);
+            }
+        }
+
+        return result;
+    }
 }
