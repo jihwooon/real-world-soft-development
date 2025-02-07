@@ -12,13 +12,30 @@ public class BankStatementProcessor {
         this.bankTransactions = bankTransactions;
     }
 
-    public double calculateTotalAmount(final List<BankTransaction> bankTransactions) {
-        double total = 0d;
+    public double calculateTotalAmount() {
+        return summarizeTransactions(
+            ((accumulator, bankTransaction) ->
+                accumulator + bankTransaction.amount()
+            )
+        );
+    }
+
+    public double calculateTotalAmountInMonth(Month month) {
+        return summarizeTransactions(
+            ((accumulator, bankTransaction) ->
+                bankTransaction.date().getMonth() == month ? accumulator + bankTransaction.amount()
+                    : accumulator
+            )
+        );
+    }
+
+    public double summarizeTransactions(final BankTransactionSummarizer bankTransactionSummarizer) {
+        double result = 0;
         for (final BankTransaction bankTransaction : bankTransactions) {
-            total += bankTransaction.amount();
+            result += bankTransactionSummarizer.summarize(result, bankTransaction);
         }
 
-        return total;
+        return result;
     }
 
     public List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions,
