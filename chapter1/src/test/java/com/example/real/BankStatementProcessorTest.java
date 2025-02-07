@@ -64,4 +64,25 @@ class BankStatementProcessorTest {
         assertThat(result.size()).isEqualTo(0);
         assertThat(result).isEqualTo(Arrays.asList());
     }
+
+    @Test
+    @DisplayName("특정 월이 주어지고 값이 일치하거나 낮으면 리스트를 반환하라")
+    void should_return_transactions_equal_in_month_and_greater_than_amount() {
+        List<BankTransaction> result = bankStatementProcessor.findTransactionsInMonthAndGreater(
+            Month.JANUARY, 4000);
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).isEqualTo(Arrays.asList(new BankTransaction(
+            LocalDate.of(2017, Month.JANUARY, 30), 5000, "Tesco")));
+    }
+
+    @Test
+    @DisplayName("특정 월이 주어지고 달 월이 불일치하고 값이 일치하지 않거나 크면 빈 배열을 반환하라")
+    void should_return_empty_list_if_no_equal_in_month_and_greater_than_amount() {
+        List<BankTransaction> result = bankStatementProcessor.findTransactionsInMonthAndGreater(
+            Month.AUGUST, 10000);
+
+        assertThat(result.size()).isEqualTo(0);
+        assertThat(result).isEqualTo(Arrays.asList());
+    }
 }
