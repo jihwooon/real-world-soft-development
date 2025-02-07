@@ -38,18 +38,6 @@ public class BankStatementProcessor {
         return result;
     }
 
-    public List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions,
-        final Month month) {
-        ArrayList<BankTransaction> bankTransactionInMonth = new ArrayList<>();
-        for (final BankTransaction bankTransaction : bankTransactions) {
-            if (bankTransaction.date().getMonth() == month) {
-                bankTransactionInMonth.add(bankTransaction);
-            }
-        }
-
-        return bankTransactionInMonth;
-    }
-
     public List<BankTransaction> findTransactionGreaterThanEqual(final int amount) {
         return findTransactions(bankTransaction -> bankTransaction.amount() >= amount);
     }

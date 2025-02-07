@@ -30,8 +30,9 @@ public class BankAnalyzer {
 
     private static void collectSummary(BankStatementProcessor bankStatementProcessor,
         List<BankTransaction> bankTransactions) {
+        BankStatementFinder bankStatementFinder = new BankStatementFinder();
         System.out.println(getGreeting() + bankStatementProcessor.calculateTotalAmount());
-        System.out.println(getGreeting() + bankStatementProcessor.selectInMonth(bankTransactions,
+        System.out.println(getGreeting() + bankStatementFinder.selectInMonth(bankTransactions,
             Month.JANUARY));
         System.out.println(getGreeting() + bankStatementProcessor.calculateTotalAmountInMonth(Month.JANUARY));
     }
