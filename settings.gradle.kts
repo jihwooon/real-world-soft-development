@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "real"
-include("chapter1", "chapter2")
+include("chapter1", "chapter2", "chapter3", "chapter4")
